@@ -184,6 +184,7 @@
         // this.$set(this.menu, this.setActiveMenu(this.menu, activeItem[index]))
         // Object.assign(this.menu, this.setActiveMenu(this.menu, activeItem[index]))
 		// console.log($PARAM$)
+		// https://www.xiabingbao.com/post/vue/vue-nesting-component.html
         this.setActiveMenu(this.menu, activeItem[index])
         console.log(JSON.stringify(this.menu))
       }
