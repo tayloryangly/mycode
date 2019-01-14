@@ -1,0 +1,125 @@
+1、更换yum源
+清华大学：https://mirrors.tuna.tsinghua.edu.cn/help/centos/
+命令：
+备份 CentOS-Base.repo  
+mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak
+写入
+vi /etc/yum.repos.d/CentOS-Base.repo
+
+i进入编辑
+
+# CentOS-Base.repo
+#
+# The mirror system uses the connecting IP address of the client and the
+# update status of each mirror to pick mirrors that are updated to and
+# geographically close to the client.  You should use this for CentOS updates
+# unless you are manually picking other mirrors.
+#
+# If the mirrorlist= does not work for you, as a fall back you can try the
+# remarked out baseurl= line instead.
+#
+#
+
+[base]
+name=CentOS-$releasever - Base
+baseurl=https://mirrors.tuna.tsinghua.edu.cn/centos/$releasever/os/$basearch/
+#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=os
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+
+#released updates
+[updates]
+name=CentOS-$releasever - Updates
+baseurl=https://mirrors.tuna.tsinghua.edu.cn/centos/$releasever/updates/$basearch/
+#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=updates
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+
+#additional packages that may be useful
+[extras]
+name=CentOS-$releasever - Extras
+baseurl=https://mirrors.tuna.tsinghua.edu.cn/centos/$releasever/extras/$basearch/
+#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=extras
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+
+#additional packages that extend functionality of existing packages
+[centosplus]
+name=CentOS-$releasever - Plus
+baseurl=https://mirrors.tuna.tsinghua.edu.cn/centos/$releasever/centosplus/$basearch/
+#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=centosplus
+gpgcheck=1
+enabled=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+
+esc退出编辑
+:wq 保存文件并退出vi
+
+更新软件包缓存
+yum makecache
+
+2、安装git
+1.查看系统是否已经安装git
+
+git --version
+
+yum 安装git
+
+yum install -y git
+
+卸载git
+
+yum remove git
+
+参考：https://blog.csdn.net/bbcckkl/article/details/81634761
+
+创建用户：在服务器中创建一个git专属用户
+useradd git
+passwd git
+
+禁止该git用户使用shell登录系统（为了安全性，一般都禁止）
+
+vi /etc/passwd
+
+
+mkdir git  
+cd git   
+git init --bare TaylorProjects.git
+
+
+
+chown -R git:git TaylorProjects.git
+
+
+
+cd  /etc/ssh 
+vi ssh_config
+
+
+
+
+
+rm -rf git
+
+
+find . -name 'git'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

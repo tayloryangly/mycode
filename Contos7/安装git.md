@@ -1,4 +1,5 @@
 #<center>Contos7安装git</center>
+##一、服务器端
 ###1、检查是否已安装git
     git --version
 ###2、安装git
@@ -18,7 +19,8 @@
 
 >按ESC退出编辑模式，输入 “:wq” 保存并且退出vi模式
 ###5、创建证书登录
->收集所有需要登录的用户的公钥，公钥位于id\_rsa.pub文件中，把我们的公钥导入到/home/git/.ssh/authorized_keys文件里，一行一个。如果没有该文件创建它：
+>收集所有需要登录用户的公钥，公钥位于id\_rsa.pub文件中  
+>若客户端需要免密登录，则要将客户端的公钥添加到/home/git/.ssh/authorized_keys文件中
 
     cd /home/git/
     mkdir .ssh
@@ -33,31 +35,54 @@
     RSAAuthentication yes     
     PubkeyAuthentication yes     
     AuthorizedKeysFile  .ssh/authorized_keys
->http://www.cnblogs.com/Leroscox/p/9627809.html  
 >按ESC退出编辑模式，输入 “:wq” 保存并且退出vi模式  
-
->修改配置之后，需要重启sshd
+>>CentOS7.4开始弃用RSAAuthentication支持，因此CentOS7.4以上用户请忽略RSAAuthentication设置
+####重启sshd
+>重启sshd
 
     systemctl restart sshd.service
->可以通过这个命令去测试SSH是否可连接：
+>测试SSH是否可连接
 
      ssh -T git@192.168.34.130
->然后在服务器，可以通过这个命令查看ssh状态
+>查看SSH状态
 
     systemctl status sshd.service
 ###7、初始化Git仓库
->首先我们选定一个目录作为Git仓库，假定是/home/gitrepo/runoob.git，在/home/gitrepo目录下输入命令：
-
     cd /home
     mkdir gitrepo
     chown git:git gitrepo/
     cd gitrepo
     git init --bare runoob.git
->以上命令Git创建一个空仓库，服务器上的Git仓库通常都以.git结尾  
 
->然后，把仓库所属用户改为git：
+>设置权限
 
     chown -R git:git runoob.git
+    chmod -R 775 runoob.git
+##二、客户端
+###1、配置用户
+>在git bash中，输入以下命令，配置使用git的用户
 
+    git config --global user.name "taylor"
+    git config --global user.email "luyao_accp@sina.com"
+###2、创建密钥
+>在git bash中，输入以下命令，为用户创建一个密钥
 
-https://www.cnblogs.com/phpstudy2015-6/p/9153497.html
+    ssh-keygen -t rsa -C "luyao_accp@sina.com"
+###3、配置公钥
+####客户端
+>####Windows
+>公钥文件路径
+>
+    C:\Users\Administrator\.ssh\id_rsa.pub
+
+>使用记事本或其他程序打开该文件，将该文件中的内容Ctrl+A全选后复制
+
+####服务器端
+>    
+    vi /home/git/.ssh/authorized_keys
+按i进入编辑模式，将以上复制的内容粘贴到authorized_keys文件中（一行一个）    
+按ESC退出编辑模式，输入 “:wq” 保存并且退出vi模式
+###4、测试仓库
+>克隆远程仓库
+
+    git clone git@192.168.34.130:/home/gitrepo/runoob.git
